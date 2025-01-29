@@ -19,10 +19,24 @@ import ballerina/test;
 import choreo/mediation;
 
 @test:Config {}
-public function testRequestFlowMultipleInstance() {
-    mediation:Context ctx = createContext("get", "/realage/result", {}, {"user_id": ["someuserId222"]});
-    http:Response|false|error|() result = rewrite(ctx, new, "/rat/user/${user_id}/realage-result");
-    assertResult(result, ctx.resourcePath().toString(), "/rat/user/someuserId222/realage-result");
+public function testRequestFlowQueryParams() {
+    mediation:Context ctx = createContext("get", "/healthcare-api/result", {}, {"user_id": ["fake-user-id-222"]});
+    http:Response|false|error|() result = rewrite(ctx, new, "/rat/user/${user_id}/healthcare-result");
+    assertResult(result, ctx.resourcePath().toString(), "/rat/user/fake-user-id-222/healthcare-result");
+}
+
+@test:Config {}
+public function testRequestFlowPathParams() {
+    mediation:Context ctx = createContext("get", "/healthcare-api/result/fake-user-id-222", {"user_id": "fake-user-id-222"}, {});
+    http:Response|false|error|() result = rewrite(ctx, new, "/rat/user/${user_id}/healthcare-api-result");
+    assertResult(result, ctx.resourcePath().toString(), "/rat/user/fake-user-id-222/healthcare-api-result");
+}
+
+@test:Config {}
+public function testRequestFlowWithPathParamsAndQueryParams() {
+    mediation:Context ctx = createContext("get", "/healthcare-api/assessments/1440567/recommendations", {"assessment_id": "1440567"}, {"user_id": ["fake-user-id-222"]});
+    http:Response|false|error|() result = rewrite(ctx, new, "/rat/user/${user_id}/assessments/${assessment_id}/rec");
+    assertResult(result, ctx.resourcePath().toString(), "/rat/user/fake-user-id-222/assessments/1440567/rec");
 }
 
 function assertResult(http:Response|false|error|() result, string resourcePath, string expResourcePath) {
