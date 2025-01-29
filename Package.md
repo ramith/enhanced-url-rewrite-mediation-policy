@@ -1,10 +1,10 @@
-# Rewrite Resource Path
+# Enhanced Rewrite Resource Path
 
 ## Overview
 
-This policy provides the capability to modify the resource path segment 
+This policy provides additional capability to modify the resource path segment 
 (i.e., the endpoint of the upstream API) of an HTTP request. The original resource path 
-will be replaced by the provided relative resource path.
+will be replaced by the provided relative resource path. new resource path can constructed using both path and query parameters of incoming request.
 
 ## Usage
 
