@@ -21,7 +21,7 @@ import choreo/mediation;
 configurable string[] dynamicPathOrQueryParameterNames = ["user_id", "assessment_id"];
 
 @mediation:RequestFlow
-public function rewrite(mediation:Context ctx, http:Request req, string newPath)
+public function rewrite(mediation:Context ctx, http:Request req, string newPath, string variablesToReplace)
     returns http:Response|false|error|() {
 
     map<string[]> foundValues = {};

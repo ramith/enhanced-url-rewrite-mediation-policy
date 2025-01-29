@@ -21,21 +21,21 @@ import choreo/mediation;
 @test:Config {}
 public function testRequestFlowQueryParams() {
     mediation:Context ctx = createContext("get", "/healthcare-api/result", {}, {"user_id": ["fake-user-id-222"]});
-    http:Response|false|error|() result = rewrite(ctx, new, "/rat/user/${user_id}/healthcare-result");
+    http:Response|false|error|() result = rewrite(ctx, new, "/rat/user/${user_id}/healthcare-result", "user_id");
     assertResult(result, ctx.resourcePath().toString(), "/rat/user/fake-user-id-222/healthcare-result");
 }
 
 @test:Config {}
 public function testRequestFlowPathParams() {
     mediation:Context ctx = createContext("get", "/healthcare-api/result/fake-user-id-222", {"user_id": "fake-user-id-222"}, {});
-    http:Response|false|error|() result = rewrite(ctx, new, "/rat/user/${user_id}/healthcare-api-result");
+    http:Response|false|error|() result = rewrite(ctx, new, "/rat/user/${user_id}/healthcare-api-result", "user_id");
     assertResult(result, ctx.resourcePath().toString(), "/rat/user/fake-user-id-222/healthcare-api-result");
 }
 
 @test:Config {}
 public function testRequestFlowWithPathParamsAndQueryParams() {
     mediation:Context ctx = createContext("get", "/healthcare-api/assessments/1440567/recommendations", {"assessment_id": "1440567"}, {"user_id": ["fake-user-id-222"]});
-    http:Response|false|error|() result = rewrite(ctx, new, "/rat/user/${user_id}/assessments/${assessment_id}/rec");
+    http:Response|false|error|() result = rewrite(ctx, new, "/rat/user/${user_id}/assessments/${assessment_id}/rec", "user_id,assessment_id");
     assertResult(result, ctx.resourcePath().toString(), "/rat/user/fake-user-id-222/assessments/1440567/rec");
 }
 
