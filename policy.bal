@@ -1,5 +1,6 @@
 import ballerina/http;
 import ballerina/log;
+import ballerina/regex;
 
 // Copyright (c) 2022 WSO2 LLC (http://www.wso2.org) All Rights Reserved.
 //
@@ -18,12 +19,11 @@ import ballerina/log;
 // under the License.
 import choreo/mediation;
 
-configurable string[] dynamicPathOrQueryParameterNames = ["user_id", "assessment_id"];
-
 @mediation:RequestFlow
 public function rewrite(mediation:Context ctx, http:Request req, string newPath, string variablesToReplace)
     returns http:Response|false|error|() {
 
+    string[] dynamicPathOrQueryParameterNames = tokenize(variablesToReplace, ",");
     map<string[]> foundValues = {};
 
     map<string[]> queryParams = ctx.queryParams();
@@ -88,3 +88,7 @@ isolated function toString(mediation:PathParamValue value) returns string {
     }
 }
 
+isolated function tokenize(string str, string delimiter) returns string[] {
+    string[] tokens = regex:split(str, delimiter);
+    return tokens;
+}
